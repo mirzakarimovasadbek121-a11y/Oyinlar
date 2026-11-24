@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark" data-age-group="kids">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 BRAIN MASTER — Aqlni Charxlovchi O'yinlar Platformasi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loader-screen" class="loader-screen">
+        <div class="brain-pulse">🧠</div>
+        <h2 class="loader-title">BRAIN MASTER</h2>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
+        <p class="loader-sub">Neyron tarmoqlar yuklanmoqda...</p>
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Countdown Overlay -->
+    <div id="countdown-overlay" class="overlay hidden">
+        <div class="countdown-circle">
+            <span id="countdown-number">3</span>
+        </div>
+        <p id="countdown-text">Tayyorlaning!</p>
+    </div>
+
+    <!-- 21 Age Selector Modal -->
+    <div id="age21-modal" class="overlay hidden">
+        <div class="modal-card glass-panel">
+            <div class="modal-icon">🎯</div>
+            <h2>21 yosh — Maxsus tanlov!</h2>
+            <p id="age21-greeting">Salom! 21 yosh uchun alohida toifa belgilanmagan. O'zingizga mos darajani tanlang:</p>
+            <div class="age21-options">
+                <button class="age-choice-btn" data-group="teens">
+                    <span class="choice-badge">15–20 YOSH</span>
+                    <strong>Brain Challenge</strong>
+                    <small>IQ, kriptografiya, mantiqiy detektiv va reaksiya</small>
+                </button>
+                <button class="age-choice-btn" data-group="adults">
+                    <span class="choice-badge">22–40 YOSH</span>
+                    <strong>Extreme Brain</strong>
+                    <small>Ekstremal IQ, shaxmat strategiyasi, biznes va paradokslar</small>
+                </button>
+                <button class="age-choice-btn" data-group="juniors">
+                    <span class="choice-badge">9–14 YOSH</span>
+                    <strong>Yosh Daholar</strong>
+                    <small>Tezkor hisoblash, labirint va so'z o'yinlari</small>
+                </button>
+                <button class="age-choice-btn" data-group="kids">
+                    <span class="choice-badge">4–8 YOSH</span>
+                    <strong>Kichkintoylar</strong>
+                    <small>Ranglar, hayvonlar, shakllar va quvnoq sanash</small>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN / REGISTRATION SCREEN -->
+    <section id="auth-screen" class="auth-screen">
+        <div class="bg-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="auth-container glass-panel">
+            <div class="logo-badge">
+                <span class="brain-logo-anim">🧠</span>
+            </div>
+            <h1 class="main-title">BRAIN MASTER</h1>
+            <p class="subtitle">"Aqlingni sinab ko‘r, chempion bo‘l!"</p>
+
+            <form id="auth-form" class="auth-form" novalidate>
+                <div class="input-group">
+                    <label for="username-input">👤 O'yinchi ismi (Username)</label>
+                    <input type="text" id="username-input" placeholder="Masalan: Muhammad" maxlength="20" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="age-input">🎂 Yoshingiz (4 dan 100 gacha)</label>
+                    <input type="number" id="age-input" placeholder="Masalan: 16" min="4" max="100">
+                </div>
+                <div id="auth-error" class="error-banner hidden"></div>
+                <button type="submit" id="start-btn" class="primary-glow-btn">
+                    <span>🚀 Boshlash</span>
+                </button>
+            </form>
+
+            <div class="auth-features">
+                <span>🎮 40 ta o'yin</span>
+                <span>♾️ Cheksiz rejim</span>
+                <span>🏆 Jonli reyting</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN PLATFORM APP -->
+    <div id="app-shell" class="app-shell hidden">
+        <!-- Top Navbar -->
+        <header class="top-nav glass-panel">
+            <div class="nav-left">
+                <div class="brand-mini" id="brand-home-btn">
+                    <span class="brand-icon">🧠</span>
+                    <span class="brand-text">BRAIN MASTER</span>
+                </div>
+                <div class="user-greeting-pill">
+                    <span id="nav-greeting">Salom, O'yinchi!</span>
+                </div>
+            </div>
+
+            <div class="nav-stats">
+                <div class="stat-pill" title="Daraja (Level)">
+                    <span>⭐ Lvl</span>
+                    <strong id="nav-level">1</strong>
+                </div>
+                <div class="stat-pill" title="Jami Ball">
+                    <span>💎 Ball</span>
+                    <strong id="nav-score">0</strong>
+                </div>
+                <div class="stat-pill" title="Tajriba (XP)">
+                    <span>⚡ XP</span>
+                    <strong id="nav-xp">0</strong>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <button id="sound-toggle-btn" class="icon-btn" title="Ovoz effektlari">🔊</button>
+                <button id="theme-toggle-btn" class="icon-btn" title="Dark / Light rejim">🌙</button>
+                <button id="switch-user-btn" class="icon-btn" title="Foydalanuvchini almashtirish">🔄</button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs & Age Category Switcher -->
+        <div class="sub-header">
+            <nav class="main-tabs">
+                <button class="tab-btn active" data-tab="games">🎮 O'yinlar (40)</button>
+                <button class="tab-btn" data-tab="missions">🎯 Missiyalar <span id="mission-badge" class="badge-dot">0/5</span></button>
+                <button class="tab-btn" data-tab="profile">👤 Profil</button>
+                <button class="tab-btn" data-tab="leaderboard">🏆 Reyting</button>
+            </nav>
+
+            <div class="category-switcher">
+                <button class="cat-btn" data-cat="kids">🧸 4–8 Kichkintoylar</button>
+                <button class="cat-btn" data-cat="juniors">⚡ 9–14 Yosh Daholar</button>
+                <button class="cat-btn" data-cat="teens">🔮 15–20 Brain Challenge</button>
+                <button class="cat-btn" data-cat="adults">👑 22–40 Extreme Brain</button>
+            </div>
+        </div>
+
+        <!-- TAB 1: GAMES DASHBOARD -->
+        <main id="tab-games" class="tab-content active">
+            <div class="category-hero glass-panel">
+                <div class="hero-info">
+                    <span id="cat-badge" class="cat-tag">4–8 YOSH</span>
+                    <h2 id="cat-title">Kichkintoylar Olami</h2>
+                    <p id="cat-welcome">Salom! Bugun aqlingni sinashga tayyormisan?</p>
+                </div>
+                <div class="hero-progress">
+                    <div class="progress-label">
+                        <span>Bo'lim progressi</span>
+                        <span id="cat-progress-text">0 / 10 o'yin</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="cat-progress-fill" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="games-grid" class="games-grid">
+                <!-- 10 game cards rendered dynamically by JS -->
+            </div>
+        </main>
+
+        <!-- TAB 2: DAILY MISSIONS -->
+        <section id="tab-missions" class="tab-content hidden">
+            <div class="section-header glass-panel">
+                <div>
+                    <h2>🎯 Kundalik Missiyalar</h2>
+                    <p id="missions-subtitle">Missiyalarni bajaring, bonus ball va XP qo'lga kiriting!</p>
+                </div>
+                <button id="claim-all-btn" class="secondary-btn">✨ Barcha tayyor mukofotlarni olish</button>
+            </div>
+            <div id="missions-list" class="missions-grid"></div>
+        </section>
+
+        <!-- TAB 3: PLAYER PROFILE -->
+        <section id="tab-profile" class="tab-content hidden">
+            <div class="profile-layout">
+                <div class="profile-card glass-panel">
+                    <div class="avatar-ring">
+                        <span id="profile-avatar">🧠</span>
+                    </div>
+                    <h2 id="profile-username">O'yinchi</h2>
+                    <p id="profile-age-label" class="muted-text">Yosh: 16 • Brain Challenge</p>
+                    <div class="level-box">
+                        <div class="level-row">
+                            <span>Daraja <strong id="profile-level">1</strong></span>
+                            <span id="profile-xp-next">0 / 500 XP</span>
+                        </div>
+                        <div class="progress-track">
+                            <div id="profile-xp-bar" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <button id="edit-profile-btn" class="secondary-btn full-width">✏️ Ism yoki yoshni o'zgartirish</button>
+                </div>
+
+                <div class="profile-stats-grid">
+                    <div class="p-stat-card glass-panel">
+                        <span class="p-stat-icon">💎</span>
+                        <span class="p-stat-label">Jami Ball</span>
+                        <strong id="stat-total-score">0</strong>
+                    </div>
+                    <div class="p-stat-card glass-panel">
+                        <span class="p-stat-icon">⚡</span>
+                        <span class="p-stat-label">Jami XP</span>
+                        <strong id="stat-total-xp">0</strong>
+                    </div>
+                    <div class="p-stat-card glass-panel">
+                        <span class="p-stat-icon">🎮</span>
+                        <span class="p-stat-label">O'ynalgan O'yinlar</span>
+                        <strong id="stat-games-played">0</strong>
+                    </div>
+                    <div class="p-stat-card glass-panel">
+                        <span class="p-stat-icon">🔥</span>
+                        <span class="p-stat-label">Eng Yaxshi Rekord</span>
+                        <strong id="stat-best-score">0</strong>
+                    </div>
+                    <div class="p-stat-card glass-panel">
+                        <span class="p-stat-icon">✅</span>
+                        <span class="p-stat-label">Bajarilgan Missiyalar</span>
+                        <strong id="stat-missions-done">0</strong>
+                    </div>
+                    <div class="p-stat-card glass-panel">
+                        <span class="p-stat-icon">🏅</span>
+                        <span class="p-stat-label">O'zlashtirilgan O'yinlar</span>
+                        <strong id="stat-unique-games">0 / 40</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: LEADERBOARD -->
+        <section id="tab-leaderboard" class="tab-content hidden">
+            <div class="section-header glass-panel">
+                <div>
+                    <h2>🏆 Chempionlar Reytingi</h2>
+                    <p id="leaderboard-subtitle">Ushbu qurilmadagi eng kuchli aqllar jadvali</p>
+                </div>
+            </div>
+            <div class="leaderboard-wrapper glass-panel">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>O'rin</th>
+                            <th>O'yinchi</th>
+                            <th>Yosh / Toifa</th>
+                            <th>Daraja</th>
+                            <th>XP</th>
+                            <th>Jami Ball</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- ACTIVE GAME ARENA MODAL -->
+    <div id="game-arena" class="game-arena hidden">
+        <div class="arena-container glass-panel">
+            <!-- Arena Top Bar -->
+            <div class="arena-header">
+                <button id="exit-game-btn" class="danger-btn">⬅️ Chiqish</button>
+                <div class="arena-title-box">
+                    <span id="arena-cat-tag" class="mini-tag">4–8 YOSH</span>
+                    <h2 id="arena-game-title">O'yin nomi</h2>
+                </div>
+                <div class="arena-hud">
+                    <div class="hud-item"><span>👤</span> <strong id="hud-user">User</strong></div>
+                    <div class="hud-item"><span>📊</span> <strong id="hud-stage">1/5</strong></div>
+                    <div class="hud-item"><span>💎</span> <strong id="hud-score">0</strong></div>
+                    <div id="hud-timer-box" class="hud-item hidden"><span>⏱️</span> <strong id="hud-timer">60s</strong></div>
+                </div>
+            </div>
+
+            <!-- Step 1: Game Rules & Start Screen -->
+            <div id="arena-intro" class="arena-stage">
+                <div class="intro-icon" id="intro-game-icon">🧩</div>
+                <h3 id="intro-game-name">O'yin nomi</h3>
+                <p id="intro-user-prompt" class="intro-user-msg">Salom, Muhammad! Tayyormisan?</p>
+                <div class="rules-card">
+                    <h4>📜 O'yin qoidalari:</h4>
+                    <p id="intro-rules-text">Qoidalar shu yerda chiqadi.</p>
+                </div>
+                <div class="mode-selector" id="mode-selector">
+                    <label class="mode-option active">
+                        <input type="radio" name="gameMode" value="standard" checked>
+                        <span>🎯 Standart Rejim (5 bosqich)</span>
+                    </label>
+                    <label class="mode-option" id="endless-mode-label">
+                        <input type="radio" name="gameMode" value="endless">
+                        <span>♾️ Cheksiz Rejim (Rekord uchun)</span>
+                    </label>
+                </div>
+                <div class="record-banner">
+                    🏆 Ushbu o'yindagi rekordingiz: <strong id="intro-best-record">0</strong> ball
+                </div>
+                <button id="arena-start-btn" class="primary-glow-btn big-start">▶️ O'yinni Boshlash</button>
+            </div>
+
+            <!-- Step 2: Active Gameplay Stage -->
+            <div id="arena-play" class="arena-stage hidden">
+                <div id="game-board" class="game-board">
+                    <!-- Dynamic Game Content Rendered Here -->
+                </div>
+
+                <div id="game-feedback" class="feedback-box hidden"></div>
+
+                <div class="arena-actions">
+                    <button id="check-answer-btn" class="primary-glow-btn hidden">✔️ Javobni Tekshirish</button>
+                    <button id="next-stage-btn" class="secondary-btn hidden">➡️ Keyingi Bosqich</button>
+                    <button id="finish-endless-btn" class="warning-btn hidden">🏁 O'yinni Yakunlash va Saqlash</button>
+                    <button id="restart-in-game-btn" class="ghost-btn">🔄 Qayta Boshlash</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Results Screen -->
+            <div id="arena-results" class="arena-stage hidden">
+                <div class="result-trophy" id="result-icon">🏆</div>
+                <h2 id="result-heading">Ajoyib Natija!</h2>
+                <p id="result-user-msg" class="result-sub">Tabriklaymiz!</p>
+
+                <div class="results-summary-grid">
+                    <div class="res-box">
+                        <span>To'plangan Ball</span>
+                        <strong id="res-score">0</strong>
+                    </div>
+                    <div class="res-box">
+                        <span>Olingan XP</span>
+                        <strong id="res-xp">+0 XP</strong>
+                    </div>
+                    <div class="res-box">
+                        <span>To'g'ri Javoblar</span>
+                        <strong id="res-correct">0</strong>
+                    </div>
+                    <div class="res-box">
+                        <span>Shaxsiy Rekord</span>
+                        <strong id="res-record">0</strong>
+                    </div>
+                </div>
+
+                <div class="results-buttons">
+                    <button id="play-again-btn" class="primary-glow-btn">🔄 Qayta O'ynash</button>
+                    <button id="back-to-menu-btn" class="secondary-btn">🏠 Bosh Menyuga Qaytish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
